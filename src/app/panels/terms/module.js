@@ -217,7 +217,7 @@ function (angular, app, _, $, kbn) {
                      .field($scope.field)
                      //.exclude($scope.panel.exclude)
                      .size($scope.panel.size))
-             )
+             ).agg(ejs.MissingAggregation('missing').field($scope.field))
          );
 
       }
@@ -241,7 +241,9 @@ function (angular, app, _, $, kbn) {
                       .field($scope.field)
                       //.exclude($scope.panel.exclude)
                       .size($scope.panel.size)
-                      .agg( statsAggregationType ))));
+                      .agg( statsAggregationType ))
+              ).agg(ejs.MissingAggregation('missing').field($scope.field))
+        );
       }
 
       // Populate the inspector panel
@@ -362,7 +364,7 @@ function (angular, app, _, $, kbn) {
 
                   scope.data.push({
                       label: 'Missing field',
-                      data: [[k, 'unknown']], meta: "missing", color: '#aaa', opacity: 0
+                      data: [[k, scope.results.aggregations.filters.missing.doc_count]], meta: "missing", color: '#aaa', opacity: 0
                   });
 
                   if (scope.panel.tmode === 'terms') {
